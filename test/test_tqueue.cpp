@@ -9,13 +9,13 @@ TEST(TQueue, can_create_queue)
 TEST(TQueue, can_add_a_value_in_queue)
 {
 	TQueue<programm> q;
-	struct programm y = { "78923", 0, 18, 9};
+	struct programm y = { 78923, 0, 18, 9};
 	ASSERT_NO_THROW(q.Push(y));
 }
 TEST(TQueue, resulting_size_is_the_same_as_the_real_one)
 {
 	TQueue<programm> q;
-	struct programm y = { "78923", 0, 18, 9 };
+	struct programm y = { 78923, 0, 18, 9 };
 	q.Push(y);
 	EXPECT_EQ(1, q.get_size());
 }

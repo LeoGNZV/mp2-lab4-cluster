@@ -12,24 +12,9 @@ void main()
 	cin >> processor_num;
 	cout << "\n Введите порог появления программы: ";
 	cin >> threshold;
-	cout << "\n Введите количество программ, которые появляются на такте: ";
+	cout << "\n Введите максимальное количество программ, которое может появиться на такте: ";
 	cin >> R;
-	cout << "\n Задайте количество программ, которые вы хотите отправить на обработку кластером: ";
-	int k;
-	cin >> k;
-	vector<programm> n_m_p;
-	for (int i = 0; i < k; i++)
-	{
-		struct programm h;
-		cout << "\nВведите ID: ";
-		cin >> h.ID;
-		cout << "\nВведите число процессоров, которые требуются для выполнения программы: ";
-		cin >> h.p;
-		cout << "\nВведите число тактов программы, за которые программа выполнится: ";
-		cin >> h.tn;
-		n_m_p.push_back(h);
-	}
-	Cluster al(processor_num, threshold, n_m_p, R);
+	Cluster al(processor_num, threshold, R);
 	cout << "\nВведите максимальное число тактов работы кластера: ";
 	cin >> tact_work_max;
 	al.StartingСluster(tact_work_max);

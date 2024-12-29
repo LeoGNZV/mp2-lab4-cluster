@@ -9,7 +9,7 @@ using namespace std;
 
 struct programm
 {
-	string ID;
+	int ID;
 	size_t num; //номер такта появления программы
 	double p; //число требуемых процессоров
 	size_t tn; //число тактов работы программы
@@ -60,17 +60,16 @@ class Cluster
 	int processor_num; // количество процессоров в кластере
 	int tact_work_max; // максимальное количество тактов работы кластера
 	double threshold; //порог появления программы
-	int R; // количество программ, появляюшихся на такте
+	int R; // максимальное количество программ, которое может появиться на такте
 	size_t Np = 0; // общее число программ 
 	size_t Nex = 0; // число выполненных программ
 	size_t Nrun = 0; // число запущенных программ
 	double Loudar = 0; // средняя загруженность кластера
-	vector<programm> not_missed_prog; // незапущенные программы
 	vector<programm> missed_prog; //запущенные программы
 	TQueue<programm> queue_programm; // очередь программ на запуск
 
 public:
-	Cluster(int pr, double th, vector<programm> n_m_p, int R_)
+	Cluster(int pr, double th, int R_)
 	{
 		if (pr >= 16 && pr <= 64)
 			processor_num = pr;
@@ -84,12 +83,6 @@ public:
 			R = R_;
 		else
 			throw "the number of possible programs to appear is incorrect";
-		for (int i = 0; i < n_m_p.size(); i++)
-		{
-			if (n_m_p[i].p <= 0 || n_m_p[i].p > processor_num)
-				throw "there are programs that cannot be executed on the cluster with so many processors";
-		}
-		not_missed_prog = n_m_p;
 	}
 
 	void StartingСluster(int tact)
@@ -104,13 +97,18 @@ public:
 		{
 			int j = 0;
 			int k = 0;
-			while (j < R - k) // рандомизированное появление программ и их добавление в очередь
+			int Realpr = 0; // реальное количество программ, которое появится на такте
+			Realpr = rand() % (R + 1);
+			while (j < Realpr - k) // рандомизированное появление программ и их добавление в очередь
 			{
-				if ((rand() % 1000 - 1) / 1000 <= threshold && not_missed_prog.size() != 0)
+				if ((rand() % 1000 - 1) / 1000 <= threshold)
 				{
-					queue_programm.Push(not_missed_prog[j]);
-					not_missed_prog[j].num = i;
-					not_missed_prog.erase(not_missed_prog.begin() + j);
+					struct programm h;
+					h.ID = rand() % 10000;
+					h.num = i; //номер такта появления программы
+					h.p = (rand() % processor_num) + 1; //число требуемых процессоров
+					h.tn = rand() % tact_work_max; //число тактов работы программы
+					queue_programm.Push(h);
 					k++;
 					Np++;
 				}
